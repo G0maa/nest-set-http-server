@@ -9,6 +9,11 @@ async function bootstrap(
 ): Promise<INestApplicationContext> {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(adapter));
 
+  // Doesn't work for some reason
+  app.getHttpServer().on('request', (req, res) => {
+    console.log('I am alive2!');
+  });
+
   const t = app.getHttpAdapter();
   t.get('/test2', (req, res) => {
     res.send('Hello Test2!');
@@ -21,6 +26,10 @@ async function init() {
   const app = express();
   const server = app.listen(3000, () => {
     console.log('server started');
+  });
+
+  server.on('request', (req, res) => {
+    console.log('I am alive!');
   });
 
   app.get('/test', (req, res) => {
